@@ -14,6 +14,3 @@ class Engineer extends Employee {
 }
 
 module.exports = Engineer;
-
-const engineer1 = new Engineer("elijah", "me", "Email", "emelanson");
-console.log(engineer1);

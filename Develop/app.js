@@ -64,29 +64,25 @@ var initPrompt = (question) => {
                 return initPrompt(initQuestion);
 
             } else if (ans.teamMember === "END ADDITIONS") {
-                console.log("Finishing up.  Thank you!");
+                let output = render(employeeObjectArray);
+                //create output directory
+
+                fs.mkdir(OUTPUT_DIR, (err) => {
+                    if (err) throw err
+                });
+
+                //write rendered HTML to file in output dir.
+                fs.writeFile(outputPath, output, function (err) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("Rendering output to 'output/team.html'.  Thank you!");
+                    }
+                });
                 return
             }
         })
-        .catch(err => { if (err) { console.log("There was an error!") } })
-}
-
-var managerPrompt = (question) => {
-    let additionalQuestions = [{
-        type: "input",
-        message: "Please enter an office Number for this Manager",
-        name: "officeNumber"
-    },]
-
-    let managerQuestions = question.concat(additionalQuestions);
-
-    inquirer
-        .prompt(managerQuestions)
-        .then(function (ans) {
-            let managerEmployee = new Manager(ans.name, ans.id, ans.email, ans.officeNumber);
-            employeeObjectArray.push(managerEmployee);
-            return initPrompt(initQuestion);
-        })
+        .catch(err => { if (err) { console.log("There was an error! " + err) } })
 }
 
 var managerPrompt = (question) => {
@@ -142,7 +138,6 @@ var internPrompt = (question) => {
             return initPrompt(initQuestion);
         })
 }
-
 
 
 /////////////////////////

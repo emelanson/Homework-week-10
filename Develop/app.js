@@ -53,11 +53,11 @@ var initPrompt = (question) => {
 
             } else if (ans.teamMember === "Engineer") {
                 console.log("Engineer");
-                return initPrompt(initQuestion);
+                EngineerPrompt(employeeQuestions);
 
             } else if (ans.teamMember === "Intern") {
                 console.log("Intern");
-                return initPrompt(initQuestion);
+                internPrompt(employeeQuestions);
 
             } else if (ans.teamMember === "List Employees") {
                 console.table(employeeObjectArray);
@@ -89,6 +89,65 @@ var managerPrompt = (question) => {
         })
 }
 
+var managerPrompt = (question) => {
+    let additionalQuestions = [{
+        type: "input",
+        message: "Please enter an office Number for this Manager",
+        name: "officeNumber"
+    },]
+
+    let managerQuestions = question.concat(additionalQuestions);
+
+    inquirer
+        .prompt(managerQuestions)
+        .then(function (ans) {
+            let managerEmployee = new Manager(ans.name, ans.id, ans.email, ans.officeNumber);
+            employeeObjectArray.push(managerEmployee);
+            return initPrompt(initQuestion);
+        })
+}
+
+var EngineerPrompt = (question) => {
+    let additionalQuestions = [{
+        type: "input",
+        message: "Please enter a GitHub for this Engineer",
+        name: "github"
+    },]
+
+    let engineerQuestions = question.concat(additionalQuestions);
+
+    inquirer
+        .prompt(engineerQuestions)
+        .then(function (ans) {
+            let engineerEmployee = new Engineer(ans.name, ans.id, ans.email, ans.github);
+            employeeObjectArray.push(engineerEmployee);
+            return initPrompt(initQuestion);
+        })
+}
+
+var internPrompt = (question) => {
+    let additionalQuestions = [{
+        type: "input",
+        message: "Please enter a school name for this intern",
+        name: "school"
+    },]
+
+    let internQuestions = question.concat(additionalQuestions);
+
+    inquirer
+        .prompt(internQuestions)
+        .then(function (ans) {
+            let internEmployee = new Intern(ans.name, ans.id, ans.email, ans.school);
+            employeeObjectArray.push(internEmployee);
+            return initPrompt(initQuestion);
+        })
+}
+
+
+
+/////////////////////////
+//THIS RUNS THE PROGRAM
+/////////////////////////
 
 initPrompt(initQuestion);
 

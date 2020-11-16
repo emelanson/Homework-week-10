@@ -13,14 +13,35 @@ const render = require("./lib/htmlRenderer");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+let employeeObjectArray = [];
+
 let initQuestion = [
     {
         type: "list",
         message: "What type of team member would you like to add?",
-        choices: ["Manager", "Engineer", "Intern", "END ADDITIONS"],
+        choices: ["Manager", "Engineer", "Intern", new inquirer.Separator(), "List Employees", "END ADDITIONS"],
         name: "teamMember"
     },
 ]
+
+let employeeQuestions = [
+    {
+        type: "input",
+        message: "Please enter a name for this employee",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "Please enter a unique ID code for the employee",
+        name: "id"
+    },
+    {
+        type: "input",
+        message: "Please enter an email address for this employee",
+        name: "email"
+    },
+]
+
 
 var initPrompt = (question) => {
     inquirer
@@ -28,7 +49,7 @@ var initPrompt = (question) => {
         .then(function (ans) {
             if (ans.teamMember === "Manager") {
                 console.log("Manager Branch");
-                return initPrompt(initQuestion);
+                managerPrompt(employeeQuestions);
 
             } else if (ans.teamMember === "Engineer") {
                 console.log("Engineer");
@@ -38,6 +59,10 @@ var initPrompt = (question) => {
                 console.log("Intern");
                 return initPrompt(initQuestion);
 
+            } else if (ans.teamMember === "List Employees") {
+                console.table(employeeObjectArray);
+                return initPrompt(initQuestion);
+
             } else if (ans.teamMember === "END ADDITIONS") {
                 console.log("Finishing up.  Thank you!");
                 return
@@ -45,6 +70,25 @@ var initPrompt = (question) => {
         })
         .catch(err => { if (err) { console.log("There was an error!") } })
 }
+
+var managerPrompt = (question) => {
+    let additionalQuestions = [{
+        type: "input",
+        message: "Please enter an office Number for this Manager",
+        name: "officeNumber"
+    },]
+
+    let managerQuestions = question.concat(additionalQuestions);
+
+    inquirer
+        .prompt(managerQuestions)
+        .then(function (ans) {
+            let managerEmployee = new Manager(ans.name, ans.id, ans.email, ans.officeNumber);
+            employeeObjectArray.push(managerEmployee);
+            return initPrompt(initQuestion);
+        })
+}
+
 
 initPrompt(initQuestion);
 
